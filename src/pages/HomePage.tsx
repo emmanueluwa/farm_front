@@ -1,0 +1,30 @@
+import landingImage from "../assets/landing.png";
+import appDownloadImage from "../assets/appDownload.png";
+
+const HomePage = () => {
+  return (
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-5 text-center -mt-16 bg-white rounded-lg shadow-md py-8">
+        <h1 className="text-5xl font-bold tracking-tight text-green-800">
+          Tuck into fresh health produce today
+        </h1>
+        <span className="text-xl">Fresh from a farm near you!</span>
+      </div>
+      <div className="grid md:grid-cols-2 gap-5">
+        <img src={landingImage} />
+        <div className="flex flex-col items-center justify-center gap-4 text-center">
+          <span className="font-bold text-3xl tracking-tighter">
+            Order fresh with ease
+          </span>
+          <span>
+            Download the FarmFrsh App for faster ordering and personalised
+            recommendations
+          </span>
+          <img src={appDownloadImage} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
