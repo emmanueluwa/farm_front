@@ -9,6 +9,8 @@ import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
+import { Farm } from "@/types";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   farmName: z.string({
@@ -43,11 +45,12 @@ const formSchema = z.object({
 type FarmFormData = z.infer<typeof formSchema>;
 
 type Props = {
+  farm?: Farm;
   onSave: (farmFormData: FormData) => void;
   isLoading: boolean;
 };
 
-const ManageFarmForm = ({ onSave, isLoading }: Props) => {
+const ManageFarmForm = ({ onSave, isLoading, farm }: Props) => {
   const form = useForm<FarmFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,6 +58,30 @@ const ManageFarmForm = ({ onSave, isLoading }: Props) => {
       menuItems: [{ name: "", price: 0 }],
     },
   });
+
+  useEffect(() => {
+    if (!farm) {
+      return;
+    }
+
+    //convert lowest denomination back to most common denomination 100p => 1gbp
+    const deliveryPriceFormatted = parseInt(
+      (farm.deliveryPrice / 100).toFixed(2)
+    );
+
+    const menuItemsFormatted = farm.menuItems.map((item) => ({
+      ...item,
+      price: parseInt((item.price / 100).toFixed(2)),
+    }));
+
+    const updatedFarm = {
+      ...farm,
+      deliveryPrice: deliveryPriceFormatted,
+      menuItems: menuItemsFormatted,
+    };
+
+    form.reset(updatedFarm);
+  }, [form, farm]);
 
   //data passed all zod checks
   const onSubmit = (formDataJson: FarmFormData) => {
