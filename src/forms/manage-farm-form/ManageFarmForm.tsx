@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DetailsSection from "./DetailsSection";
+import { Separator } from "@/components/ui/separator";
+import ProduceSection from "./ProduceSection";
 
 const formSchema = z.object({
   farmName: z.string({
@@ -62,6 +64,8 @@ const ManageFarmForm = ({ onSave, isLoading }: Props) => {
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
       >
         <DetailsSection />
+        <Separator />
+        <ProduceSection />
       </form>
     </Form>
   );

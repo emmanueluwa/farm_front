@@ -1,0 +1,18 @@
+export const produceList = [
+  "Vegetables",
+  "Fruits",
+  "Dairy",
+  "Meat",
+  "Poultry",
+  "Eggs",
+  "Grains",
+  "Cereals",
+  "Herbs",
+  "Spices",
+  "Nuts",
+  "Seeds",
+  "Honey",
+  "Jams",
+  "Bakery",
+  "Baked",
+];
