@@ -5,6 +5,7 @@ import { z } from "zod";
 import DetailsSection from "./DetailsSection";
 import { Separator } from "@/components/ui/separator";
 import ProduceSection from "./ProduceSection";
+import MenuSection from "./MenuSection";
 
 const formSchema = z.object({
   farmName: z.string({
@@ -66,6 +67,8 @@ const ManageFarmForm = ({ onSave, isLoading }: Props) => {
         <DetailsSection />
         <Separator />
         <ProduceSection />
+        <Separator />
+        <MenuSection />
       </form>
     </Form>
   );
