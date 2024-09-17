@@ -68,3 +68,42 @@ export const useCreateMyFarm = () => {
 
   return { createFarm, isLoading };
 };
+
+export const useUpdateMyFarm = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateMyFarmRequest = async (farmFormData: FormData): Promise<Farm> => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/farm`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: farmFormData,
+    });
+
+    if (!response) {
+      throw new Error("Failed to update farm");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutate: updateFarm,
+    isLoading,
+    error,
+    isSuccess,
+  } = useMutation(updateMyFarmRequest);
+
+  if (isSuccess) {
+    toast.success("Farm updated");
+  }
+
+  if (error) {
+    toast.error("Unable to update farm");
+  }
+
+  return { updateFarm, isLoading };
+};

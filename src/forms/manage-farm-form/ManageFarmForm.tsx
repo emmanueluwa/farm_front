@@ -12,35 +12,41 @@ import { Button } from "@/components/ui/button";
 import { Farm } from "@/types";
 import { useEffect } from "react";
 
-const formSchema = z.object({
-  farmName: z.string({
-    required_error: "farm name is required",
-  }),
-  city: z.string({
-    required_error: "city is required",
-  }),
-  country: z.string({
-    required_error: "country is required",
-  }),
-  deliveryPrice: z.coerce.number({
-    required_error: "delivery price is required",
-    invalid_type_error: "must be valid number",
-  }),
-  estimatedDeliveryTime: z.coerce.number({
-    required_error: "estimated delivery time is required",
-    invalid_type_error: "must be valid number",
-  }),
-  produce: z.array(z.string()).nonempty({
-    message: "please select at least one item",
-  }),
-  menuItems: z.array(
-    z.object({
-      name: z.string().min(1, "name is required"),
-      price: z.coerce.number().min(1, "price is required"),
-    })
-  ),
-  imageFile: z.instanceof(File, { message: "image is required" }),
-});
+const formSchema = z
+  .object({
+    farmName: z.string({
+      required_error: "farm name is required",
+    }),
+    city: z.string({
+      required_error: "city is required",
+    }),
+    country: z.string({
+      required_error: "country is required",
+    }),
+    deliveryPrice: z.coerce.number({
+      required_error: "delivery price is required",
+      invalid_type_error: "must be valid number",
+    }),
+    estimatedDeliveryTime: z.coerce.number({
+      required_error: "estimated delivery time is required",
+      invalid_type_error: "must be valid number",
+    }),
+    produce: z.array(z.string()).nonempty({
+      message: "please select at least one item",
+    }),
+    menuItems: z.array(
+      z.object({
+        name: z.string().min(1, "name is required"),
+        price: z.coerce.number().min(1, "price is required"),
+      })
+    ),
+    imageUrl: z.string().optional(),
+    imageFile: z.instanceof(File, { message: "image is required" }).optional(),
+  })
+  .refine((data) => data.imageUrl || data.imageFile, {
+    message: "Either image URL or image file must be provided",
+    path: ["imageFile"],
+  });
 
 type FarmFormData = z.infer<typeof formSchema>;
 
@@ -115,7 +121,9 @@ const ManageFarmForm = ({ onSave, isLoading, farm }: Props) => {
       );
     });
 
-    formData.append(`imageFile`, formDataJson.imageFile);
+    if (formDataJson.imageFile) {
+      formData.append(`imageFile`, formDataJson.imageFile);
+    }
 
     onSave(formData);
   };
