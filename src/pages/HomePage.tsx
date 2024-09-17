@@ -14,7 +14,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="flex flex-col gap-5 text-center -mt-16 bg-white rounded-lg shadow-md py-8">
+      <div className="md:px-32 flex flex-col gap-5 text-center -mt-16 bg-white rounded-lg shadow-md py-8">
         <h1 className="text-5xl font-bold tracking-tight text-green-800">
           Tuck into fresh health produce today
         </h1>

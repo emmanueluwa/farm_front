@@ -26,3 +26,12 @@ export type Farm = {
   imageUrl: string;
   lastUpdated: string;
 };
+
+export type FarmSearchResponse = {
+  data: Farm[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+};
