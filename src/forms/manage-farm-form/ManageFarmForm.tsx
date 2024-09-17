@@ -6,6 +6,9 @@ import DetailsSection from "./DetailsSection";
 import { Separator } from "@/components/ui/separator";
 import ProduceSection from "./ProduceSection";
 import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   farmName: z.string({
@@ -69,6 +72,10 @@ const ManageFarmForm = ({ onSave, isLoading }: Props) => {
         <ProduceSection />
         <Separator />
         <MenuSection />
+        <Separator />
+        <ImageSection />
+
+        {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
       </form>
     </Form>
   );
