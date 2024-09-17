@@ -40,7 +40,7 @@ const formSchema = z.object({
   imageFile: z.instanceof(File, { message: "image is required" }),
 });
 
-type farmFormData = z.infer<typeof formSchema>;
+type FarmFormData = z.infer<typeof formSchema>;
 
 type Props = {
   onSave: (farmFormData: FormData) => void;
@@ -48,7 +48,7 @@ type Props = {
 };
 
 const ManageFarmForm = ({ onSave, isLoading }: Props) => {
-  const form = useForm<farmFormData>({
+  const form = useForm<FarmFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       produce: [],
@@ -57,8 +57,40 @@ const ManageFarmForm = ({ onSave, isLoading }: Props) => {
   });
 
   //data passed all zod checks
-  const onSubmit = (formDataJson: farmFormData) => {
-    //conver formdatajson to formdataobject
+  const onSubmit = (formDataJson: FarmFormData) => {
+    //convert formdatajson to formdataobject
+    const formData = new FormData();
+
+    formData.append("farmName", formDataJson.farmName);
+    formData.append("city", formDataJson.city);
+    formData.append("country", formDataJson.country);
+
+    //convert price to lowest currency denomination for stripe => 1gbp = 100p
+    formData.append(
+      "deliveryPrice",
+      (formDataJson.deliveryPrice * 100).toString()
+    );
+
+    formData.append(
+      "estimatedDeliveryTime",
+      formDataJson.estimatedDeliveryTime.toString()
+    );
+
+    formDataJson.produce.forEach((produce, index) => {
+      formData.append(`produce[${index}]`, produce);
+    });
+
+    formDataJson.menuItems.forEach((menuItem, index) => {
+      formData.append(`menuItems[${index}][name]`, menuItem.name);
+      formData.append(
+        `menuItems[${index}][price]`,
+        (menuItem.price * 100).toString()
+      );
+    });
+
+    formData.append(`imageFile`, formDataJson.imageFile);
+
+    onSave(formData);
   };
 
   return (
