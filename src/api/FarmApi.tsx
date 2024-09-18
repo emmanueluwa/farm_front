@@ -11,6 +11,7 @@ export const userSearchFarms = (searchState: SearchState, city?: string) => {
     params.set("page", searchState.page.toString());
     //convert array to comma separated string, to avoid issues with urlencoding in backend
     params.set("selectedProduce", searchState.selectedProduce.join(","));
+    params.set("sortOption", searchState.sortOption);
 
     const response = await fetch(
       `${API_BASE_URL}/api/farm/search/${city}?${params.toString()}`

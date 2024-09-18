@@ -2,6 +2,7 @@ import { userSearchFarms } from "@/api/FarmApi";
 import PaginationSelector from "@/components/PaginationSelector";
 import ProduceFilter from "@/components/ProduceFilter";
 import SearchBar, { SearchForm } from "@/components/SearchBar";
+import SearchOptionDropdown from "@/components/SearchOptionDropdown";
 import SearchResultCard from "@/components/SearchResultCard";
 import SearchResultInfo from "@/components/SearchResultInfo";
 import { useState } from "react";
@@ -11,6 +12,7 @@ export type SearchState = {
   searchQuery: string;
   page: number;
   selectedProduce: string[];
+  sortOption: string;
 };
 
 const SearchPage = () => {
@@ -20,6 +22,7 @@ const SearchPage = () => {
     searchQuery: "",
     page: 1,
     selectedProduce: [],
+    sortOption: "bestMatch",
   });
 
   //state maintained in parent each time component rerenders
@@ -33,7 +36,16 @@ const SearchPage = () => {
   resetSearch
   setPage
   setSelectedProduce
+  setSortOption
   */
+
+  const setSortOption = (sortOption: string) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      sortOption,
+      page: 1,
+    }));
+  };
 
   const setSelectedProduce = (selectedProduce: string[]) => {
     setSearchState((prevState) => ({
@@ -93,7 +105,15 @@ const SearchPage = () => {
           placeHolder="Search Produce or Farm"
           onReset={resetSearch}
         />
-        <SearchResultInfo total={results.pagination.total} city={city} />
+
+        <div className="flex justify-between flex-col gap-3 lg:flex-row">
+          <SearchResultInfo total={results.pagination.total} city={city} />
+          <SearchOptionDropdown
+            sortOption={searchState.sortOption}
+            onChange={(value) => setSortOption(value)}
+          />
+        </div>
+
         {results.data.map((farm) => (
           <SearchResultCard farm={farm} />
         ))}
