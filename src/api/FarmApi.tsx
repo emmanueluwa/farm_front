@@ -9,6 +9,7 @@ export const userSearchFarms = (searchState: SearchState, city?: string) => {
     const params = new URLSearchParams();
     params.set("searchQuery", searchState.searchQuery);
     params.set("page", searchState.page.toString());
+    //convert array to comma separated string, to avoid issues with urlencoding in backend
     params.set("selectedProduce", searchState.selectedProduce.join(","));
 
     const response = await fetch(

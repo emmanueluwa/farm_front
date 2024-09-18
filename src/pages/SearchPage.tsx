@@ -22,6 +22,9 @@ const SearchPage = () => {
     selectedProduce: [],
   });
 
+  //state maintained in parent each time component rerenders
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
   //when city value
   const { results, isLoading } = userSearchFarms(searchState, city);
 
@@ -77,6 +80,10 @@ const SearchPage = () => {
         <ProduceFilter
           selectedProduce={searchState.selectedProduce}
           onChange={setSelectedProduce}
+          isExpanded={isExpanded}
+          onExpandedClick={() =>
+            setIsExpanded((prevIsExpanded) => !prevIsExpanded)
+          }
         />
       </div>
       <div id="main-content" className="flex flex-col gap-5">
