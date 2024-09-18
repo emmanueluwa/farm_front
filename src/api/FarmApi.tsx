@@ -1,8 +1,27 @@
 import { SearchState } from "@/pages/SearchPage";
-import { FarmSearchResponse } from "@/types";
+import { Farm, FarmSearchResponse } from "@/types";
 import { useQuery } from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export const useGetFarm = (farmId?: string) => {
+  const getFarmByIdRequest = async (): Promise<Farm> => {
+    const response = await fetch(`${API_BASE_URL}/api/farm/${farmId}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to get farm");
+    }
+
+    return response.json();
+  };
+
+  const { data: farm, isLoading } = useQuery("fetchFarm", getFarmByIdRequest, {
+    //only enable query if we have farmId, prevents query being called when there is no id (error + waste of api call)
+    enabled: !!farmId,
+  });
+
+  return { farm, isLoading };
+};
 
 export const userSearchFarms = (searchState: SearchState, city?: string) => {
   const createSearchRequest = async (): Promise<FarmSearchResponse> => {

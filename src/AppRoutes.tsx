@@ -6,6 +6,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import ManageFarmPage from "./pages/ManageFarmPage";
 import SearchPage from "./pages/SearchPage";
+import DetailPage from "./pages/DetailPage";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,15 @@ const AppRoutes = () => {
         element={
           <Layout>
             <SearchPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/detail/:farmId"
+        element={
+          <Layout>
+            <DetailPage />
           </Layout>
         }
       />
