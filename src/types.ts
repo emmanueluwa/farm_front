@@ -20,7 +20,7 @@ export type Farm = {
   city: string;
   country: string;
   deliveryPrice: number;
-  estimatedDeliveryPrice: number;
+  estimatedDeliveryTime: number;
   produce: string[];
   menuItems: MenuItem[];
   imageUrl: string;
