@@ -1,5 +1,6 @@
 import { userSearchFarms } from "@/api/FarmApi";
 import PaginationSelector from "@/components/PaginationSelector";
+import ProduceFilter from "@/components/ProduceFilter";
 import SearchBar, { SearchForm } from "@/components/SearchBar";
 import SearchResultCard from "@/components/SearchResultCard";
 import SearchResultInfo from "@/components/SearchResultInfo";
@@ -9,6 +10,7 @@ import { useParams } from "react-router-dom";
 export type SearchState = {
   searchQuery: string;
   page: number;
+  selectedProduce: string[];
 };
 
 const SearchPage = () => {
@@ -17,6 +19,7 @@ const SearchPage = () => {
   const [searchState, setSearchState] = useState<SearchState>({
     searchQuery: "",
     page: 1,
+    selectedProduce: [],
   });
 
   //when city value
@@ -26,7 +29,16 @@ const SearchPage = () => {
   setSearchQuery
   resetSearch
   setPage
+  setSelectedProduce
   */
+
+  const setSelectedProduce = (selectedProduce: string[]) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      selectedProduce,
+      page: 1,
+    }));
+  };
 
   const setPage = (page: number) => {
     setSearchState((prevState) => ({
@@ -61,7 +73,12 @@ const SearchPage = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div id="produce-list">insert produce here :)</div>
+      <div id="produce-list">
+        <ProduceFilter
+          selectedProduce={searchState.selectedProduce}
+          onChange={setSelectedProduce}
+        />
+      </div>
       <div id="main-content" className="flex flex-col gap-5">
         <SearchBar
           searchQuery={searchState.searchQuery}
