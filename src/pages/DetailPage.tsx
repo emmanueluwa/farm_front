@@ -1,12 +1,24 @@
 import { useGetFarm } from "@/api/FarmApi";
 import FarmInfo from "@/components/FarmInfo";
 import MenuItem from "@/components/MenuItem";
+import OrderSummary from "@/components/OrderSummary";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Card } from "@/components/ui/card";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+
+export type CartItem = {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
 
 const DetailPage = () => {
   const { farmId } = useParams();
   const { farm, isLoading } = useGetFarm(farmId);
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   if (isLoading || !farm) {
     return "Loading...";
@@ -27,6 +39,12 @@ const DetailPage = () => {
           {farm.menuItems.map((menuItem) => (
             <MenuItem menuItem={menuItem} />
           ))}
+        </div>
+
+        <div>
+          <Card>
+            <OrderSummary farm={farm} cartItems={cartItems} />
+          </Card>
         </div>
       </div>
     </div>
