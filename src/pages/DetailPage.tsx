@@ -1,4 +1,5 @@
 import { useGetFarm } from "@/api/FarmApi";
+import { useCreateCheckoutSession } from "@/api/OrderApi";
 import CheckoutButton from "@/components/CheckoutButton";
 import FarmInfo from "@/components/FarmInfo";
 import MenuItem from "@/components/MenuItem";
@@ -20,6 +21,8 @@ export type CartItem = {
 const DetailPage = () => {
   const { farmId } = useParams();
   const { farm, isLoading } = useGetFarm(farmId);
+  const { createCheckoutSession, isLoading: isCheckoutLoading } =
+    useCreateCheckoutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     // functional update
@@ -80,8 +83,30 @@ const DetailPage = () => {
     });
   };
 
-  const onCheckout = (userFormData: UserFormData) => {
-    console.log("user FORM DATA! :D", userFormData);
+  const onCheckout = async (userFormData: UserFormData) => {
+    if (!farm) {
+      return;
+    }
+
+    const checkoutData = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      farmId: farm._id,
+      deliveryDetails: {
+        name: userFormData.name,
+        addressLine1: userFormData.addressLine1,
+        city: userFormData.city,
+        country: userFormData.country,
+        email: userFormData.email as string,
+      },
+    };
+
+    const data = await createCheckoutSession(checkoutData);
+    //link taking user to stripe
+    window.location.href = data.url;
   };
 
   if (isLoading || !farm) {
@@ -119,6 +144,7 @@ const DetailPage = () => {
               <CheckoutButton
                 disabled={cartItems.length === 0}
                 onCheckout={onCheckout}
+                isLoading={isCheckoutLoading}
               />
             </CardFooter>
           </Card>
