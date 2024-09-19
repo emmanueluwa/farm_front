@@ -4,6 +4,7 @@ import MenuItem from "@/components/MenuItem";
 import OrderSummary from "@/components/OrderSummary";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
+import { MenuItem as MenuItemType } from "@/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -19,6 +20,39 @@ const DetailPage = () => {
   const { farm, isLoading } = useGetFarm(farmId);
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const addToCart = (menuItem: MenuItemType) => {
+    //check if item is in cart
+    setCartItems((prevCartItems) => {
+      const existingCartItem = prevCartItems.find(
+        (cartItem) => cartItem._id === menuItem._id
+      );
+      let updatedCartItems;
+
+      //if item is in cart, update the quantity
+      if (existingCartItem) {
+        updatedCartItems = prevCartItems.map((cartItem) =>
+          cartItem._id === menuItem._id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        //if item not in cart add as new item
+        updatedCartItems = [
+          ...prevCartItems,
+          {
+            _id: menuItem._id,
+            name: menuItem.name,
+            price: menuItem.price,
+            quantity: 1,
+          },
+        ];
+      }
+
+      //when passing a func into a fnc that updates state, thing returned at end of func is set in state
+      return updatedCartItems;
+    });
+  };
 
   if (isLoading || !farm) {
     return "Loading...";
@@ -37,7 +71,10 @@ const DetailPage = () => {
           <FarmInfo farm={farm} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
           {farm.menuItems.map((menuItem) => (
-            <MenuItem menuItem={menuItem} />
+            <MenuItem
+              menuItem={menuItem}
+              addToCart={() => addToCart(menuItem)}
+            />
           ))}
         </div>
 
