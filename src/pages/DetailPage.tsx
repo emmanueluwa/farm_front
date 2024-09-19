@@ -1,9 +1,10 @@
 import { useGetFarm } from "@/api/FarmApi";
+import CheckoutButton from "@/components/CheckoutButton";
 import FarmInfo from "@/components/FarmInfo";
 import MenuItem from "@/components/MenuItem";
 import OrderSummary from "@/components/OrderSummary";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Card } from "@/components/ui/card";
+import { Card, CardFooter } from "@/components/ui/card";
 import { MenuItem as MenuItemType } from "@/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -19,7 +20,11 @@ const DetailPage = () => {
   const { farmId } = useParams();
   const { farm, isLoading } = useGetFarm(farmId);
 
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    // functional update
+    const storedCartItems = sessionStorage.getItem(`cartItems-${farmId}`);
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   const addToCart = (menuItem: MenuItemType) => {
     //check if item is in cart
@@ -49,6 +54,11 @@ const DetailPage = () => {
         ];
       }
 
+      sessionStorage.setItem(
+        `cartItems-${farmId}`,
+        JSON.stringify(updatedCartItems)
+      );
+
       //when passing a func into a fnc that updates state, thing returned at end of func is set in state
       return updatedCartItems;
     });
@@ -58,6 +68,11 @@ const DetailPage = () => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = prevCartItems.filter(
         (item) => cartItem._id !== item._id
+      );
+
+      sessionStorage.setItem(
+        `cartItems-${farmId}`,
+        JSON.stringify(updatedCartItems)
       );
 
       return updatedCartItems;
@@ -95,6 +110,9 @@ const DetailPage = () => {
               cartItems={cartItems}
               removeFromCart={removeFromCart}
             />
+            <CardFooter>
+              <CheckoutButton />
+            </CardFooter>
           </Card>
         </div>
       </div>
