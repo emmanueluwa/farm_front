@@ -16,7 +16,7 @@ const MobileNavLinks = () => {
         to="/manage-farm"
         className="flex bg-white items-center font-bold hover:text-green-800"
       >
-        My Farm
+        Manage Farm
       </Link>
       <Link
         to="/user-profile"
