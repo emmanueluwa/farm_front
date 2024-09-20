@@ -135,3 +135,55 @@ export const useGetMyFarmOrders = () => {
 
   return { orders, isLoading };
 };
+
+type UpdateStatusOrderRequest = {
+  orderId: string;
+  status: string;
+};
+
+export const useUpdateMyFarmOrder = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateMyFarmOrderRequest = async (
+    updateStatusOrderRequest: UpdateStatusOrderRequest
+  ) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/my/farm/order/${updateStatusOrderRequest.orderId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: updateStatusOrderRequest.status }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateFarmStatus,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateMyFarmOrderRequest);
+
+  if (isSuccess) {
+    toast.success("order updated");
+  }
+
+  if (isError) {
+    toast.error("Unable to update error");
+    reset();
+  }
+
+  return { updateFarmStatus, isLoading };
+};
