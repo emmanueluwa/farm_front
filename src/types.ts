@@ -27,7 +27,7 @@ export type Farm = {
   lastUpdated: string;
 };
 
-type OrderStatus =
+export type OrderStatus =
   | "placed"
   | "paid"
   | "inProgress"
