@@ -6,7 +6,7 @@ This project is a MERN (MongoDB, Express.js, React.js, Node.js) stack applicatio
 
 ## Link
 
-- Deployed project: [here](https://petstays.onrender.com)
+- Deployed project: [here](https://farm-front.onrender.com)
 
 ## Features
 
