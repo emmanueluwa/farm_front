@@ -52,7 +52,7 @@ This project is a MERN (MongoDB, Express.js, React.js, Node.js) stack applicatio
 2. Install dependencies:
 
    ```
-   cd petstays-front
+   cd farm_front
    npm install
    ```
 
@@ -67,7 +67,7 @@ This project is a MERN (MongoDB, Express.js, React.js, Node.js) stack applicatio
 ## Related Repositories
 
 - Backend API: [backend](https://github.com/emmanueluwa/farm_back)
-<!-- - E2E Tests: [tests](https://github.com/emmanueluwa/petstays_e2e_tests) -->
+<!-- - E2E Tests: [tests](https://github.com/emmanueluwa/farm_e2e_tests) -->
 
 ## Deployment
 
